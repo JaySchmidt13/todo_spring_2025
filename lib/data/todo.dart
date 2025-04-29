@@ -7,6 +7,8 @@ class Todo {
   final DateTime createdAt;
   final DateTime? completedAt;
   final DateTime? dueAt;
+  final String category;
+  final String? location;
 
   Todo({
     required this.id,
@@ -15,6 +17,8 @@ class Todo {
     required this.createdAt,
     required this.completedAt,
     required this.dueAt,
+    required this.category,
+    required this.location,
   });
 
   Map<String, dynamic> toSnapshot() {
@@ -24,6 +28,8 @@ class Todo {
       'createdAt': Timestamp.fromDate(createdAt),
       'completedAt': completedAt != null ? Timestamp.fromDate(completedAt!) : null,
       'dueAt': dueAt != null ? Timestamp.fromDate(dueAt!) : null,
+      'category' : category,
+      'location' : location,
     };
   }
 
@@ -36,6 +42,8 @@ class Todo {
       createdAt: data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : DateTime.now(),
       completedAt: data['completedAt'] != null ? (data['completedAt'] as Timestamp).toDate() : null,
       dueAt: data['dueAt'] != null ? (data['dueAt'] as Timestamp).toDate() : null,
+      category: data['category'] ?? 'Default',
+      location: data['location'],
     );
   }
 }

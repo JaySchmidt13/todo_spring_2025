@@ -18,9 +18,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
   final _searchController = TextEditingController();
+  final _locationController = TextEditingController();
+  String _selectedCategory = 'Default';
   StreamSubscription<List<Todo>>? _todoSubscription;
   List<Todo> _todos = [];
   List<Todo>? _filteredTodos;
+  final List<String> _categories = ['Default', 'Work', 'Personal', 'Shopping', 'Study'];
   FilterSheetResult _filters = FilterSheetResult(
     sortBy: 'date',
     order: 'descending',
@@ -173,31 +176,70 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     color: Colors.green[100],
                     padding: const EdgeInsets.all(32.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.text,
-                            controller: _controller,
-                            decoration: const InputDecoration(
-                              labelText: 'Enter Task:',
-                            ),
+                        DropdownButtonFormField<String>(
+                          value: _selectedCategory,
+                          decoration: const InputDecoration(
+                            labelText: 'Category',
+                            filled: true,
+                            fillColor: Colors.white,
+                          ),
+                          items: _categories.map((String category) {
+                            return DropdownMenuItem(
+                              value: category,
+                              child: Text(category),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedCategory = newValue!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _locationController,
+                          decoration: const InputDecoration(
+                            labelText: 'Location (optional)',
+                            filled: true,
+                            fillColor: Colors.white,
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: () async {
-                            if (user != null && _controller.text.isNotEmpty) {
-                              await FirebaseFirestore.instance.collection('todos').add({
-                                'text': _controller.text,
-                                'createdAt': FieldValue.serverTimestamp(),
-                                'uid': user.uid,
-                              });
-                              _controller.clear();
-                            }
-                          },
-                          child: const Text('Add'),
+                        const SizedBox(height: 8),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                keyboardType: TextInputType.text,
+                                controller: _controller,
+                                decoration: const InputDecoration(
+                                  labelText: 'Enter Task',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () async {
+                                if (user != null && _controller.text.isNotEmpty) {
+                                  await FirebaseFirestore.instance.collection('todos').add({
+                                    'text': _controller.text,
+                                    'createdAt': FieldValue.serverTimestamp(),
+                                    'uid': user.uid,
+                                    'category': _selectedCategory,
+                                    'location': _locationController.text.isEmpty ? null : _locationController.text,
+                                  });
+                                  _controller.clear();
+                                  _locationController.clear();
+                                }
+                              },
+                              child: const Text('Add'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
