@@ -1,0 +1,2 @@
+/Users/jacobspivack/Desktop/CS/appdev/projects/todo_spring_2025/android/app/.cxx/Debug/2269206t/x86/CMakeFiles/edit_cache.dir
+/Users/jacobspivack/Desktop/CS/appdev/projects/todo_spring_2025/android/app/.cxx/Debug/2269206t/x86/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+/Users/jacobspivack/Desktop/CS/appdev/projects/todo_spring_2025/android/app/.cxx/Debug/2269206t/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/jacobspivack/Desktop/CS/appdev/projects/todo_spring_2025/android/app/.cxx/Debug/2269206t/armeabi-v7a/CMakeFiles/rebuild_cache.dir

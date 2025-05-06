@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../data/todo.dart';
 import 'details/detail_screen.dart';
 import 'filter/filter_sheet.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -147,7 +147,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               return ListTile(
                                 leading: Checkbox(
                                   value: todo.completedAt != null,
-                                  onChanged: (bool? value) {
+                                  onChanged: (bool? value) async{
+
+                                    if (value == true) {
+                                      final player = AudioPlayer();
+                                      await player.play(AssetSource('sounds/mission-complete-pikmin-4.mp3')); // Ensure the file path matches the asset declaration
+                                    }
+
+
                                     final updateData = {
                                       'completedAt': value == true ? FieldValue.serverTimestamp() : null
                                     };
@@ -226,6 +233,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             ElevatedButton(
                               onPressed: () async {
                                 if (user != null && _controller.text.isNotEmpty) {
+
+                                  final player = AudioPlayer();
+                                  await player.play(AssetSource('African4.mp3')); // Ensure the file path matches the asset declaration
+
                                   await FirebaseFirestore.instance.collection('todos').add({
                                     'text': _controller.text,
                                     'createdAt': FieldValue.serverTimestamp(),
@@ -233,9 +244,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'category': _selectedCategory,
                                     'location': _locationController.text.isEmpty ? null : _locationController.text,
                                   });
+
                                   _controller.clear();
                                   _locationController.clear();
-                                }
+                              }
                               },
                               child: const Text('Add'),
                             ),

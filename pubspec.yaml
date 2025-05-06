@@ -19,6 +19,7 @@ dependencies:
   flutter_local_notifications: ^19.0.0
   app_settings: ^5.1.1
   timezone: ^0.10.0
+  audioplayers: ^6.4.0
 
 dev_dependencies:
   flutter_test:
@@ -34,3 +35,5 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/sounds/
