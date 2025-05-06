@@ -8,6 +8,7 @@ import 'details/detail_screen.dart';
 import 'filter/filter_sheet.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:share_plus/share_plus.dart';
+import '../widgets/location_search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -226,13 +227,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                         const SizedBox(height: 8),
-                        TextField(
-                          controller: _locationController,
-                          decoration: const InputDecoration(
-                            labelText: 'Location (optional)',
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
+                        LocationSearchField(
+                          onLocationSelected: (String location) {
+                            setState(() {
+                              _locationController.text = location;
+                            });
+                          },
                         ),
                         const SizedBox(height: 8),
                         Row(
