@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (user != null && _controller.text.isNotEmpty) {
 
                                   final player = AudioPlayer();
-                                  await player.play(AssetSource('African4.mp3')); // Ensure the file path matches the asset declaration
+                                  await player.play(AssetSource('sounds/African4.mp3')); // Ensure the file path matches the asset declaration
 
                                   await FirebaseFirestore.instance.collection('todos').add({
                                     'text': _controller.text,
