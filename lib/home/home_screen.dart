@@ -7,6 +7,7 @@ import '../data/todo.dart';
 import 'details/detail_screen.dart';
 import 'filter/filter_sheet.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,6 +76,18 @@ class _HomeScreenState extends State<HomeScreen> {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((querySnapshot) => querySnapshot.docs.map((doc) => Todo.fromSnapshot(doc)).toList());
+  }
+
+  Future<void> _shareTask(String taskText) async {
+    try {
+      await Share.share('Task: $taskText', subject: 'My TODO Task');
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error sharing: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -147,21 +160,29 @@ class _HomeScreenState extends State<HomeScreen> {
                               return ListTile(
                                 leading: Checkbox(
                                   value: todo.completedAt != null,
-                                  onChanged: (bool? value) async{
-
+                                  onChanged: (bool? value) async {
                                     if (value == true) {
                                       final player = AudioPlayer();
-                                      await player.play(AssetSource('sounds/mission-complete-pikmin-4.mp3')); // Ensure the file path matches the asset declaration
+                                      await player.play(AssetSource('sounds/mission-complete-pikmin-4.mp3'));
                                     }
-
-
                                     final updateData = {
                                       'completedAt': value == true ? FieldValue.serverTimestamp() : null
                                     };
                                     FirebaseFirestore.instance.collection('todos').doc(todo.id).update(updateData);
                                   },
                                 ),
-                                trailing: Icon(Icons.arrow_forward_ios),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(Icons.share),
+                                      onPressed: () {
+                                        _shareTask(todo.text);
+                                      },
+                                    ),
+                                    const Icon(Icons.arrow_forward_ios),
+                                  ],
+                                ),
                                 title: Text(
                                   todo.text,
                                   style: todo.completedAt != null
@@ -176,8 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   );
                                 },
-                              );
-                            },
+                              );                            },
                           ),
                   ),
                   Container(
