@@ -31,17 +31,33 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Future<void> _delete() async {
     try {
-      await FirebaseFirestore.instance.collection('todos').doc(widget.todo.id).delete();
+      if (widget.todo.isCompleted) {
+        // If completed, just remove from main list but keep in archive
+        await FirebaseFirestore.instance
+            .collection('todos')
+            .doc(widget.todo.id)
+            .update({
+          'archived': true,
+          'archivedAt': FieldValue.serverTimestamp(),
+        });
+      } else {
+        // If not completed, delete normally
+        await FirebaseFirestore.instance
+            .collection('todos')
+            .doc(widget.todo.id)
+            .delete();
+      }
+
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Todo deleted!')),
+          const SnackBar(content: Text('Todo removed!')),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to delete todo: $e')),
+          SnackBar(content: Text('Failed to remove todo: $e')),
         );
       }
     }
