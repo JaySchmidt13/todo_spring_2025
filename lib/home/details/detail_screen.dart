@@ -7,6 +7,8 @@ import '../../data/todo.dart';
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+
+//HELLOOOOOOOOOOOOOO
 class DetailScreen extends StatefulWidget {
   final Todo todo;
 
@@ -149,7 +151,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Details'),
+        title: const Text('Todo Details'),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
@@ -263,6 +265,14 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                 ],
               ),
+            ),
+            ListTile(
+              title: const Text('Category'),
+              subtitle: Text(widget.todo.category),
+            ),
+            ListTile(
+              title: const Text('Location'),
+              subtitle: Text(widget.todo.location ?? 'N/A'),
             ),
           ],
         ),
